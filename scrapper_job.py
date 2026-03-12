@@ -66,7 +66,7 @@ def run_pipeline():
         "Emirates NBD",
         sort="new",
         time_filter="day",
-        limit=5
+        limit=30
     ):
 
         submission.comments.replace_more(limit=0)
