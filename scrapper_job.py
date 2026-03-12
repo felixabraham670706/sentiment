@@ -72,7 +72,7 @@ def run_pipeline():
         query,
         sort="new",
         time_filter="month",
-        limit=5
+        limit=20
     ):
 
         submission.comments.replace_more(limit=0)
