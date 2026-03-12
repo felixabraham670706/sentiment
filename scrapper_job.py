@@ -40,21 +40,17 @@ def clean_text_list(posts):
 def classify_sentiment(text):
 
     prompt = f"""
-Classify the sentiment of the following comment about a bank.
+    Classify sentiment of the post.
 
-Return ONLY one word:
-Positive
-Neutral
-Negative
+    Return only one word:
 
-Examples:
-"I love ENBD customer service" -> Positive
-"ENBD blocked my account" -> Negative
-"I opened an ENBD account today" -> Neutral
+    Positive
+    Neutral
+    Negative
 
-Comment:
-{text}
-"""
+    Comment:
+    {text}
+    """
 
     response = client.responses.create(
         model="gpt-4o-mini",
@@ -62,7 +58,6 @@ Comment:
     )
 
     return response.output_text.strip()
-
 
 def run_pipeline():
 
