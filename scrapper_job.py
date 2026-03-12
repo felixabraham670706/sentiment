@@ -61,12 +61,12 @@ Comment:
 def run_pipeline():
 
     posts = []
-
+    query = "Emirates NBD OR ENBD OR Liv Bank"
     for submission in reddit.subreddit("all").search(
-        "Emirates NBD",
+        query,
         sort="new",
-        time_filter="day",
-        limit=30
+        time_filter="month",
+        limit=50
     ):
 
         submission.comments.replace_more(limit=0)
