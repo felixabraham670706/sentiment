@@ -40,17 +40,21 @@ def clean_text_list(posts):
 def classify_sentiment(text):
 
     prompt = f"""
-    Classify sentiment of the post.
+Classify the sentiment of the following comment about a bank.
 
-    Return only one word:
+Return ONLY one word:
+Positive
+Neutral
+Negative
 
-    Positive
-    Neutral
-    Negative
+Examples:
+"I love ENBD customer service" -> Positive
+"ENBD blocked my account" -> Negative
+"I opened an ENBD account today" -> Neutral
 
-    Comment:
-    {text}
-    """
+Comment:
+{text}
+"""
 
     response = client.responses.create(
         model="gpt-4o-mini",
@@ -59,12 +63,11 @@ def classify_sentiment(text):
 
     return response.output_text.strip()
 
+
 def run_pipeline():
 
     posts = []
-
-    query = "Emirates NBD OR ENBD"
-
+    query = "Emirates NBD OR ENBD OR Liv Bank"
     for submission in reddit.subreddit("all").search(
         query,
         sort="new",
@@ -72,23 +75,20 @@ def run_pipeline():
         limit=50
     ):
 
-        # combine title and body for better sentiment context
-        text = f"{submission.title} {submission.selftext}"
+        submission.comments.replace_more(limit=0)
 
-        if len(text.strip()) > 5:
-            posts.append(text)
+        for comment in submission.comments.list():
+            posts.append(comment.body)
 
     cleaned = clean_text_list(posts)
 
     sentiments = []
 
     for c in cleaned:
-        print("Classifying:", c[:30])
 
         try:
-            s = classify_sentiment(c[:1000])   # avoid extremely long inputs
-        except Exception as e:
-            print("Classification error:", e)
+            s = classify_sentiment(c)
+        except:
             s = "Neutral"
 
         sentiments.append(s)
@@ -101,6 +101,7 @@ def run_pipeline():
     df.to_csv("sentiment.csv", index=False)
 
     print("CSV updated")
+
 
 if __name__ == "__main__":
     run_pipeline()
