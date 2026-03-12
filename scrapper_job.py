@@ -40,11 +40,17 @@ def clean_text_list(posts):
 def classify_sentiment(text):
 
     prompt = f"""
-Return only one word.
+Classify the sentiment of the following comment about a bank.
 
+Return ONLY one word:
 Positive
 Neutral
 Negative
+
+Examples:
+"I love ENBD customer service" -> Positive
+"ENBD blocked my account" -> Negative
+"I opened an ENBD account today" -> Neutral
 
 Comment:
 {text}

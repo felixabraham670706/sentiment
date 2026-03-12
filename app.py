@@ -3,13 +3,16 @@ import pandas as pd
 from datetime import datetime
 from streamlit_autorefresh import st_autorefresh
 import pytz
+import os
 
 st.title("Emirates NBD Reddit Sentiment Dashboard")
 
-dubai = pytz.timezone("Asia/Dubai")
-dubai_time = datetime.now(dubai)
+file_time = os.path.getmtime("sentiment.csv")
 
-st.write("Last refreshed:", dubai_time.strftime("%Y-%m-%d %H:%M:%S"))
+dubai = pytz.timezone("Asia/Dubai")
+last_update = datetime.fromtimestamp(file_time, dubai)
+
+st.write("Last data update:", last_update.strftime("%Y-%m-%d %H:%M:%S"))
 
 st_autorefresh(interval=300000)
 
