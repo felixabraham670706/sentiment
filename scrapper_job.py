@@ -83,10 +83,12 @@ def run_pipeline():
     sentiments = []
 
     for c in cleaned:
+        print("Classifying:", c[:30])
 
         try:
             s = classify_sentiment(c[:1000])   # avoid extremely long inputs
-        except:
+        except Exception as e:
+            print("Classification error:", e)
             s = "Neutral"
 
         sentiments.append(s)
