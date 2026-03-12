@@ -63,7 +63,7 @@ def run_pipeline():
 
     posts = []
 
-    query = "Emirates NBD OR ENBD OR Liv Bank"
+    query = "Emirates NBD OR ENBD"
 
     for submission in reddit.subreddit("all").search(
         query,
