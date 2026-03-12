@@ -67,7 +67,9 @@ Comment:
 def run_pipeline():
 
     posts = []
+
     query = "Emirates NBD OR ENBD OR Liv Bank"
+
     for submission in reddit.subreddit("all").search(
         query,
         sort="new",
@@ -75,10 +77,11 @@ def run_pipeline():
         limit=50
     ):
 
-        submission.comments.replace_more(limit=0)
+        # combine title and body for better sentiment context
+        text = f"{submission.title} {submission.selftext}"
 
-        for comment in submission.comments.list():
-            posts.append(comment.body)
+        if len(text.strip()) > 5:
+            posts.append(text)
 
     cleaned = clean_text_list(posts)
 
@@ -87,7 +90,7 @@ def run_pipeline():
     for c in cleaned:
 
         try:
-            s = classify_sentiment(c)
+            s = classify_sentiment(c[:1000])   # avoid extremely long inputs
         except:
             s = "Neutral"
 
@@ -101,7 +104,6 @@ def run_pipeline():
     df.to_csv("sentiment.csv", index=False)
 
     print("CSV updated")
-
 
 if __name__ == "__main__":
     run_pipeline()
